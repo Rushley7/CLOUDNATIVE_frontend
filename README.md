@@ -1,59 +1,83 @@
-# Pedidos360Frontend
+# Pedidos360 - Frontend 🛒
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
+Frontend del sistema **Pedidos360**, hecho en **Angular** con login mediante **Microsoft Entra ID (MSAL)**. Este es el encargo de la Evaluación Parcial N°1 de **DSY1107 - Desarrollo Cloud Native I**, Duoc UC.
 
-## Development server
+## ¿De qué se trata?
 
-To start a local development server, run:
+Básicamente es un sistema pa' gestionar pedidos donde implementamos el flujo completo de login con un IDaaS (Microsoft Entra ID) y consumimos un backend que valida el token JWT antes de dejarte hacer cualquier cosa. La idea del ramo es entender cómo se separa la autenticación de la aplicación misma, en vez de hacer un login casero con usuario/contraseña en la BD.
 
-```bash
+## Con qué está hecho
+
+- **Angular** (standalone components + signals, nada de NgModules)
+- **MSAL** (`@azure/msal-browser` y `@azure/msal-angular`) para el login con Microsoft
+- **TypeScript**
+- **Reactive Forms** para el formulario de pedidos
+- **HttpClient** con interceptor que pega el token solo, sin que tengamos que andar pasándolo a mano en cada petición
+
+## Cómo funciona el login (por si el profe pregunta)
+
+1. Le das a "Iniciar sesión" y te manda pa'l login de Microsoft (`loginRedirect`).
+2. Eliges tu cuenta institucional y Entra ID te devuelve un token JWT con el scope `OT.Create`.
+3. El interceptor de MSAL agarra ese token y lo pega automáticamente como `Authorization: Bearer ...` en cada petición al backend (`localhost:8080`).
+4. Las rutas `/pedidos` y `/pedidos/nuevo` están protegidas con `MsalGuard`, o sea si no has iniciado sesión ni cagando entras, te manda directo al login.
+
+## Qué se puede hacer
+
+- Login y logout con el selector de cuenta de Microsoft (nada de escribir el correo a mano cada vez)
+- Dashboard de bienvenida que te saluda con tu nombre real
+- Ver el listado de pedidos (con su estado de carga, de vacío y de error, pa' que no quede la escoba si el backend está caído)
+- Crear un pedido nuevo con formulario (cliente, producto, cantidad, precio, estado)
+
+## Lo que necesitas antes de correr esto
+
+- Node.js (v18 pa'rriba)
+- Angular CLI: `npm install -g @angular/cli`
+- Tener el backend corriendo en `localhost:8080` → [repo del backend acá](https://github.com/Rushley7/CLOUDNATIVE_backend)
+
+## Instalación
+
+\`\`\`bash
+npm install
+\`\`\`
+
+## Correrlo en modo desarrollo
+
+\`\`\`bash
 ng serve
-```
+\`\`\`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Y listo, queda arriba en `http://localhost:4200`.
 
-## Code scaffolding
+## Configuración de Entra ID
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Toda la config de MSAL está en `src/environments/environment.ts`:
 
-```bash
-ng generate component component-name
-```
+- `clientId`: el Application (client) ID de la app registrada como SPA en Entra ID
+- `authority`: la URL del tenant
+- `redirectUri`: a dónde te devuelve después de loguearte
+- `scopes`: el permiso que le pedimos al backend (`OT.Create`)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Cómo está organizada la cuestión
 
-```bash
-ng generate --help
-```
+\`\`\`
+src/app/
+├── pages/
+│   ├── dashboard/        # la pantalla de bienvenida
+│   ├── pedidos-list/     # el listado
+│   └── pedido-form/      # el formulario pa' crear pedidos
+├── services/
+│   └── pedidos.service.ts
+├── models/
+│   └── pedido.model.ts
+├── app.config.ts         # acá vive toda la config de MSAL, rutas, interceptor
+├── app.routes.ts         # las rutas y los guards
+└── app.ts                # el componente raíz (header, sesión, etc.)
+\`\`\`
 
-## Building
+## El otro repo
 
-To build the project run:
+- **Backend:** [CLOUDNATIVE_backend](https://github.com/Rushley7/CLOUDNATIVE_backend) — Spring Boot, valida el JWT, conectado a AWS RDS.
 
-```bash
-ng build
-```
+## Quién hizo esto
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Rubén Velásquez (Rushley) — Ingeniería en Informática, Duoc UC.
