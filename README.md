@@ -80,4 +80,4 @@ src/app/
 
 ## Quién hizo esto
 
-Rubén Velásquez (Rushley) — Ingeniería en Informática, Duoc UC.
+Rubén Velásquez (Rushley) y Maximiliano Millacaris — Ingeniería en Informática, Duoc UC.
