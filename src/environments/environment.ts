@@ -9,6 +9,6 @@ export const environment = {
   },
   apiConfig: {
     scopes: ['api://f6c6a292-0ca4-48c1-aff9-133d0f76a624/OT.Create'],
-    uri: 'http://localhost:8080'
+    uri: 'https://motbxxb267.execute-api.us-east-1.amazonaws.com'
   }
 };
