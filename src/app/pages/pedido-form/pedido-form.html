@@ -1,0 +1,52 @@
+<div class="header">
+  <h1>Nuevo pedido</h1>
+  <a routerLink="/pedidos" class="link">← Volver al listado</a>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+  <div class="field">
+    <label for="cliente">Cliente</label>
+    <input id="cliente" type="text" formControlName="cliente" placeholder="Nombre del cliente" />
+    @if (form.controls.cliente.invalid && form.controls.cliente.touched) {
+      <span class="hint hint--error">Ingresa el nombre del cliente (mínimo 2 caracteres).</span>
+    }
+  </div>
+
+  <div class="field">
+    <label for="producto">Producto</label>
+    <input id="producto" type="text" formControlName="producto" placeholder="Nombre del producto" />
+    @if (form.controls.producto.invalid && form.controls.producto.touched) {
+      <span class="hint hint--error">Ingresa el producto (mínimo 2 caracteres).</span>
+    }
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="cantidad">Cantidad</label>
+      <input id="cantidad" type="number" formControlName="cantidad" min="1" />
+      @if (form.controls.cantidad.invalid && form.controls.cantidad.touched) {
+        <span class="hint hint--error">Debe ser al menos 1.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="precio">Precio unitario</label>
+      <input id="precio" type="number" formControlName="precio" min="0" />
+      @if (form.controls.precio.invalid && form.controls.precio.touched) {
+        <span class="hint hint--error">Ingresa un precio válido.</span>
+      }
+    </div>
+  </div>
+
+  @if (success()) {
+    <div class="banner banner--success">✅ Pedido creado correctamente.</div>
+  }
+
+  @if (error()) {
+    <div class="banner banner--error">⚠️ No se pudo crear el pedido. Intenta nuevamente.</div>
+  }
+
+  <button type="submit" class="btn btn--primary" [disabled]="submitting()">
+    {{ submitting() ? 'Guardando…' : 'Crear pedido' }}
+  </button>
+</form>

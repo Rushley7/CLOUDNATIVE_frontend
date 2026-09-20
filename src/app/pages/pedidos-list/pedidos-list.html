@@ -1,0 +1,54 @@
+<div class="header">
+  <h1>Pedidos</h1>
+  <a routerLink="/pedidos/nuevo" class="btn btn--primary">+ Nuevo pedido</a>
+</div>
+
+@if (loading()) {
+  <div class="state">
+    <div class="spinner"></div>
+    <p>Cargando pedidos…</p>
+  </div>
+} @else if (error()) {
+  <div class="state state--error">
+    <div class="state__icon">⚠️</div>
+    <h2>No se pudo conectar con el servidor</h2>
+    <p>Verifica que el backend esté disponible e inténtalo nuevamente.</p>
+    <button (click)="cargarPedidos()" class="btn btn--primary">Reintentar</button>
+  </div>
+} @else if (pedidos().length === 0) {
+  <div class="state">
+    <div class="state__icon">📭</div>
+    <h2>No hay pedidos aún</h2>
+    <p>Crea tu primer pedido para empezar.</p>
+    <a routerLink="/pedidos/nuevo" class="btn btn--primary">Crear pedido</a>
+  </div>
+} @else {
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (pedido of pedidos(); track pedido.id) {
+          <tr>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.producto }}</td>
+            <td>{{ pedido.cantidad }}</td>
+            <td>{{ pedido.precio | number: '1.0-0' }}</td>
+            <td>
+              <span class="badge" [class.badge--pendiente]="pedido.estado === 'PENDIENTE'">{{ pedido.estado }}</span>
+            </td>
+            <td>{{ pedido.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

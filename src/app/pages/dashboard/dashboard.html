@@ -1,0 +1,18 @@
+<section class="welcome">
+  <h1>Hola, {{ userName() }} 👋</h1>
+  <p>Bienvenido a Pedidos360. ¿Qué quieres hacer hoy?</p>
+</section>
+
+<section class="cards">
+  <a routerLink="/pedidos" class="card">
+    <div class="card__icon">📦</div>
+    <h2>Ver pedidos</h2>
+    <p>Revisa el listado completo de pedidos registrados.</p>
+  </a>
+
+  <a routerLink="/pedidos/nuevo" class="card">
+    <div class="card__icon">➕</div>
+    <h2>Crear pedido</h2>
+    <p>Registra un nuevo pedido para un cliente.</p>
+  </a>
+</section>

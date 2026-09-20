@@ -1,0 +1,25 @@
+<header class="topbar">
+  <div class="topbar__inner">
+    <span class="brand">Pedidos<span class="brand__accent">360</span></span>
+
+    @if (isLoggedIn()) {
+      <nav class="nav">
+        <a routerLink="/" routerLinkActive="nav__link--active" [routerLinkActiveOptions]="{ exact: true }" class="nav__link">Inicio</a>
+        <a routerLink="/pedidos" routerLinkActive="nav__link--active" class="nav__link">Pedidos</a>
+      </nav>
+    }
+
+    <div class="session">
+      @if (isLoggedIn()) {
+        <span class="session__user">{{ userName() }}</span>
+        <button (click)="logout()" class="btn btn--ghost">Cerrar sesión</button>
+      } @else {
+        <button (click)="login()" class="btn btn--primary">Iniciar sesión</button>
+      }
+    </div>
+  </div>
+</header>
+
+<main class="content">
+  <router-outlet />
+</main>
